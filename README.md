@@ -1,99 +1,130 @@
-# ⚡ Zuplae Python Starter
+# 📊 Zuplae Python Starter
 
-Boilerplate moderno da **Zuplae** para projetos em Python com **FastAPI**, configurado com **Poetry**, qualidade de código (Ruff, Black, mypy), testes automatizados, Docker e CI no GitHub Actions.
-
----
-
-## 🚀 Tecnologias e ferramentas
-
-* **Linguagem:** Python 3.13
-* **Framework Web:** FastAPI + Uvicorn/Gunicorn
-* **Gerenciamento de dependências:** Poetry
-* **Configurações e envs:** pydantic-settings
-* **Qualidade de código:** Ruff, Black, mypy, pre-commit
-* **Testes:** pytest, pytest-asyncio, httpx
-* **Containerização:** Docker e Docker Compose
-* **CI/CD:** GitHub Actions
+O **Zuplae Python Starter** é um boilerplate para criação de APIs modernas com **FastAPI**, estruturado para seguir boas práticas de arquitetura, logging, configuração e testes automatizados.
 
 ---
 
-## 📂 Estrutura do projeto
+## 🚀 **Tecnologias Utilizadas**
+
+* **Linguagem:** Python 3.13+
+* **Framework:** FastAPI
+* **Validação e Configuração:** Pydantic + Pydantic Settings
+* **Logs:** Configuração centralizada com suporte a formatação customizada e contextos
+* **Testes:** Pytest + HTTPX
+* **Dependências:** Poetry
+* **Formatação de Código:** Black + Ruff + isort
+
+---
+
+## 🛠️ **Estrutura do Projeto**
 
 ```
-📦 zuplae-python-starter/
-├── app/                  # Código principal
-│   ├── api/               # Rotas
-│   ├── core/              # Configurações e logging
-│   └── main.py             # Entrada da aplicação
-├── tests/                 # Testes unitários
-├── .env.example           # Exemplo de variáveis de ambiente
-├── docker-compose.yml     # Serviços Docker
-├── Dockerfile             # Build da aplicação
-├── Makefile               # Comandos úteis
-└── pyproject.toml         # Configuração do Poetry
+app/
+├── api/                     # Endpoints da aplicação
+│   └── v1/                  # Versão da API
+│       ├── health/          # Exemplo de rota de health check
+│       │   ├── controller.py
+│       │   ├── schema.py
+│       │   └── __init__.py
+├── core/                    # Configurações centrais
+│   ├── config.py             # Configurações via Pydantic Settings
+│   ├── deps.py               # Injeção de dependências
+│   └── logging.py            # Configuração de logging
+├── domains/                  
+│   └── health/
+│       ├── use_case.py       # Regras de negócio
+|       └──repositories/      # Camada de acesso a dados
+├── main.py                   # Entrypoint FastAPI
+└── app.py                    # Função `create_app`
+
+devtools/                     # Ferramentas e scripts auxiliares
+Makefile                      # Comandos de automação
+pyproject.toml                # Configurações do Poetry e ferramentas
 ```
 
 ---
 
-## 🧪 Começo rápido
+## 🔧 **Configuração de Logs**
 
-### 1. Clonar e instalar dependências
+Logs centralizados no `app/core/logging.py` com suporte a contexto extra via `extra={}`.
+
+```python
+from app.core.logging import get_logger
+logger = get_logger(__name__)
+logger.info("get liveness", extra={"context": "health"})
+```
+
+---
+
+## 📓 **Makefile**
+
+Comandos úteis:
 
 ```bash
-git clone git@github.com:ZuplaeSistemas/zuplae-python-starter.git
-cd zuplae-python-starter
+make run         # Executa a aplicação localmente
+make test        # Executa os testes
+make lint        # Verifica estilo do código
+make format      # Formata código
+make install     # Instala dependências
+```
+
+---
+
+## 🗂 **API, Domains e Repository**
+
+* **`api/vx`**: Camada de entrega (controllers)
+* **`domains`**: Casos de uso / regra de negócio
+* **`repositories`**: Acesso a dados
+
+Fluxo sugerido:
+
+```
+Request -> Controller (api/vx) -> UseCase (domains) -> Repository -> Resposta
+```
+
+---
+
+## 🛠️ **Rodando o Projeto**
+
+```bash
+# Instalar dependências
 poetry install
+
+# Ativar virtualenv
+eval $(poetry env activate)
+
+# Criar .env
 cp devtools/envs/.env.example .env
-poetry run pre-commit install
+
+# Rodar aplicação
+make run
 ```
 
-### 2. Rodar em desenvolvimento
-
-```bash
-poetry run app
-# Acesse http://localhost:8000/docs
-```
-
-### 3. Rodar com Docker
-
-```bash
-docker compose up --build
-```
+Acesse: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## 🛠️ Scripts úteis (Makefile)
+## 📚 **Testes**
 
-* `make init` → instala deps, copia .env e configura pre-commit
-* `make run` → inicia a API em modo dev
-* `make lint` → checa código com Ruff
-* `make format` → formata código com Black e Ruff
-* `make type` → verifica tipagem com mypy
-* `make test` → executa testes
-* `make docker-up` / `make docker-down` → sobe ou derruba containers
+Testes assíncronos com pytest e HTTPX.
 
----
+```python
+import pytest
+from httpx import AsyncClient
+from app.main import app
 
-## 📋 Teste de saúde
-
-```bash
-curl http://localhost:8000/api/v1/health
-# {"status":"ok"}
+@pytest.mark.asyncio
+async def test_health():
+    async with AsyncClient(base_url="http://test") as ac:
+        response = await ac.get("/api/v1/health/liveness")
+    assert response.status_code == 200
 ```
 
 ---
 
-## 📦 CI/CD
+## 🔍 **Próximos Passos**
 
-O projeto já inclui um **GitHub Actions** que:
-
-1. Instala dependências
-2. Roda lint e format check
-3. Executa verificação de tipos (mypy)
-4. Roda todos os testes
-
----
-
-## 📜 Licença
-
-Este projeto é mantido pela **Zuplae** e segue os termos definidos internamente.
+* [ ] Adicionar novos casos de uso
+* [ ] Criar repositórios reais
+* [ ] Configurar CI/CD
+* [ ] Implementar autenticação JWT

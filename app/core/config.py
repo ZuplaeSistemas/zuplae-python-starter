@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     API_PREFIX_V1: str = "/api/v1"
 
     API_CORS_ORIGINS: List[str] = ["*"]
+    
+    LOG_LEVEL: str = "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+    ENABLE_UVICORN_ACCESS_LOGS: bool = True
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
