@@ -43,7 +43,7 @@ Boilerplate moderno da **Zuplae** para projetos em Python com **FastAPI**, confi
 git clone git@github.com:ZuplaeSistemas/zuplae-python-starter.git
 cd zuplae-python-starter
 poetry install
-cp .env.example .env
+cp devtools/envs/.env.example .env
 poetry run pre-commit install
 ```
 

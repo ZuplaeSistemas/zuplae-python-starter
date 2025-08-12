@@ -1,0 +1,20 @@
+[project]
+name = "zuplae-python-starter"
+version = "0.0.1"
+description = "zuplae-python-starter com uma base moderna, rápida e padronizada — focada em FastAPI + Poetry, lint/format, testes, Docker e CI."
+authors = [
+    {name = "Maykon Granemann",email = "maykondgranemann@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard] (>=0.116.1,<0.117.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{ include = "app" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
