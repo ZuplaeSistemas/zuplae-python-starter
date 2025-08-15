@@ -87,13 +87,25 @@ Request -> Controller (api/vx) -> UseCase (domains) -> Repository -> Resposta
 ## 🛠️ **Rodando o Projeto**
 
 ```bash
-# Instalar dependências
+# Glone do repositorio
+git clone git@github.com:ZuplaeSistemas/zuplae-python-starter.git
+
+# Acessar o repositorio local
+cd zuplae-python-starter
+
+# Usar o pyenv para usar a versão correta do Python 
+pyenv global 3.13.2
+
+# Instalar o poetry
+pip install poetry
+
+# Instalar dependências do projeto
 poetry install
 
 # Ativar virtualenv
 eval $(poetry env activate)
 
-# Criar .env
+# Criar .env a partir da env exemplo
 cp devtools/envs/.env.example .env
 
 # Rodar aplicação
