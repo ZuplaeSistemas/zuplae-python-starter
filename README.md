@@ -186,11 +186,81 @@ O comando do Makefile já cuida de copiar esse arquivo para `.env` antes de roda
 make test
 ```
 
+
+
 ---
 
-## 🔍 **Próximos Passos**
+## 🐳 Docker
 
-* [ ] Adicionar novos casos de uso
-* [ ] Criar repositórios reais
-* [ ] Configurar CI/CD
-* [ ] Implementar autenticação JWT
+### Build da imagem
+
+```bash
+docker build -t zuplae/python-starter:latest .
+```
+
+### Rodar o container
+
+```bash
+docker run -p 8000:8000 zuplae/python-starter:latest
+```
+
+---
+
+## 🔄 CI/CD
+
+Este projeto utiliza **GitHub Actions** com as seguintes etapas:
+
+1. Rodar **pre-commit hooks** (Black, Ruff, Mypy, Commitlint)
+2. Rodar **pytest**
+3. Build da imagem Docker
+4. Publicação da imagem no **GitHub Container Registry (GHCR)**
+
+A pipeline roda automaticamente nas branches:
+
+* **main** → Produção
+* **staging** → Homologação
+
+### Publicação no GHCR
+
+As imagens são publicadas em:
+
+```
+ghcr.io/<owner>/<repo>:<tag>
+```
+
+> Exemplo: `ghcr.io/zuplae/zuplae-python-starter:latest`
+
+O `GITHUB_TOKEN` já é usado para autenticação automática, sem necessidade de configurar secrets adicionais.
+
+---
+
+## 📖 Convenção de Commits
+
+Este projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/):
+
+* `feat:` nova funcionalidade
+* `fix:` correção de bug
+* `docs:` alteração na documentação
+* `chore:` tarefas de manutenção
+* `test:` alterações relacionadas a testes
+
+Exemplo:
+
+```bash
+feat: add user authentication endpoint
+```
+
+---
+
+
+## ✅ Checklist para novos contribuidores
+
+* [x] Clonar o repositório
+* [x] Instalar dependências com `poetry install`
+* [x] Instalar hooks de pre-commit: `poetry run pre-commit install`
+* [x] Configurar ambiente local (se necessário, `.env`)
+* [x] Rodar `make lint && make test` antes do commit
+
+---
+
+Feito com 💛 pela **Zuplae**
