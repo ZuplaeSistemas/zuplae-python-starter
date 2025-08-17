@@ -1,6 +1,6 @@
 # 📊 Zuplae Python Starter
 
-O **Zuplae Python Starter** é um boilerplate para criação de APIs modernas com **FastAPI**, estruturado para seguir boas práticas de arquitetura, logging, configuração e testes automatizados.
+O **Zuplae Python Starter** é um boilerplate para criação de APIs modernas com **FastAPI**, estruturado para seguir boas práticas de arquitetura, logging, configuração, linting e testes automatizados.
 
 ---
 
@@ -12,7 +12,7 @@ O **Zuplae Python Starter** é um boilerplate para criação de APIs modernas co
 * **Logs:** Configuração centralizada com suporte a formatação customizada e contextos
 * **Testes:** Pytest + HTTPX
 * **Dependências:** Poetry
-* **Formatação de Código:** Black + Ruff + isort
+* **Lint & Formatação de Código:** Black + Ruff + Mypy + Pre-commit
 
 ---
 
@@ -61,11 +61,56 @@ logger.info("get liveness", extra={"context": "health"})
 Comandos úteis:
 
 ```bash
-make run         # Executa a aplicação localmente
-make test        # Executa os testes
-make lint        # Verifica estilo do código
-make format      # Formata código
-make install     # Instala dependências
+make run           # Executa a aplicação localmente
+make test          # Executa os testes
+make lint          # Verifica estilo do código (black, ruff e mypy)
+make format-check  # Checa a formacacao do código (black e ruff --check)
+make format        # Formata código (black e ruff --fix)
+make pre-commit:   # Faz o check manual do pre-commit
+make install       # Instala dependências
+```
+
+---
+
+## 🔍 **Lint & Pre-commit**
+
+O projeto utiliza **Black**, **Ruff** e **Mypy** para lint, formatação e checagem de tipos.
+
+* **Black** → Formatação consistente de código.
+* **Ruff** → Linter ultrarrápido e substituto do isort.
+* **Mypy** → Checagem estática de tipos.
+
+Configuração do **pre-commit** (`.pre-commit-config.yaml`):
+
+```yaml
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.2
+    hooks:
+      - id: ruff
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+```
+
+Instalação dos hooks:
+
+```bash
+poetry run pre-commit install
+```
+
+Execução manual:
+
+```bash
+make pre-commit
 ```
 
 ---
@@ -87,13 +132,13 @@ Request -> Controller (api/vx) -> UseCase (domains) -> Repository -> Resposta
 ## 🛠️ **Rodando o Projeto**
 
 ```bash
-# Glone do repositorio
+# Clone do repositorio
 git clone git@github.com:ZuplaeSistemas/zuplae-python-starter.git
 
 # Acessar o repositorio local
 cd zuplae-python-starter
 
-# Usar o pyenv para usar a versão correta do Python 
+# Usar o pyenv para usar a versão correta do Python
 pyenv global 3.13.2
 
 # Instalar o poetry
@@ -106,7 +151,7 @@ poetry install
 eval $(poetry env activate)
 
 # Criar .env a partir da env exemplo
-cp devtools/envs/.env.example .env
+cp devtools/envs/.env.dev .env
 
 # Rodar aplicação
 make run
@@ -130,6 +175,15 @@ async def test_health():
     async with AsyncClient(base_url="http://test") as ac:
         response = await ac.get("/api/v1/health/liveness")
     assert response.status_code == 200
+```
+
+### Rodando os testes
+
+Os testes utilizam um arquivo `.env.test` específico (em `devtools/envs/.env.test`).
+O comando do Makefile já cuida de copiar esse arquivo para `.env` antes de rodar os testes:
+
+```bash
+make test
 ```
 
 ---

@@ -1,7 +1,9 @@
 from typing import Protocol
 
+
 class HealthRepository(Protocol):
     def ready(self) -> bool: ...
+
 
 class InMemoryHealthRepository:
     def ready(self) -> bool:

@@ -9,9 +9,9 @@ class Application(FastAPI):
     def __init__(self):
         setup_logging()
         super().__init__(
-            title=settings.APP_NAME, 
-            description=settings.APP_DESCRIPTION, 
-            version=settings.APP_VERSION, 
+            title=settings.APP_NAME,
+            description=settings.APP_DESCRIPTION,
+            version=settings.APP_VERSION,
         )
         self.add_middleware(
             CORSMiddleware,
@@ -20,9 +20,8 @@ class Application(FastAPI):
             allow_methods=["*"],
             allow_headers=["*"],
         )
-        #routes
+        # routes
         self.include_router(v1_router, prefix=settings.API_PREFIX_V1)
 
         logger = get_logger(__name__)
         logger.info("Application started", extra={"service": settings.APP_NAME})
-

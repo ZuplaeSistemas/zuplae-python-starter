@@ -18,7 +18,6 @@ def setup_logging() -> None:
         {
             "version": 1,
             "disable_existing_loggers": False,
-
             "formatters": {
                 "default": {
                     "format": "[%(asctime)s] [%(levelname)s] %(name)s: %(message)s",
@@ -30,7 +29,6 @@ def setup_logging() -> None:
                     "datefmt": "%Y-%m-%d %H:%M:%S",
                 },
             },
-
             "handlers": {
                 "console": {
                     "class": "logging.StreamHandler",
@@ -45,7 +43,6 @@ def setup_logging() -> None:
                     "stream": "ext://sys.stdout",
                 },
             },
-
             "loggers": {
                 # Seus logs de app: use get_logger(__name__)
                 "app": {
@@ -53,7 +50,6 @@ def setup_logging() -> None:
                     "level": level,
                     "propagate": False,
                 },
-
                 # Uvicorn core/error
                 "uvicorn": {
                     "handlers": ["console"],
@@ -65,7 +61,6 @@ def setup_logging() -> None:
                     "level": level,
                     "propagate": False,
                 },
-
                 # Access log (requests HTTP)
                 "uvicorn.access": {
                     "handlers": ["access_console"],
@@ -73,7 +68,6 @@ def setup_logging() -> None:
                     "propagate": False,
                 },
             },
-
             # Root logger: útil para libs que não têm logger dedicado
             "root": {
                 "handlers": ["console"],
